@@ -1,0 +1,3651 @@
+[
+    {
+        "id": "25b50a64703b5dbf",
+        "type": "tab",
+        "label": "Host management",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "45b89d4ab1bd2d20",
+        "type": "tab",
+        "label": "Dump management",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "0729b9071d15ddb8",
+        "type": "subflow",
+        "name": "Get Host Version",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 60,
+                "y": 120,
+                "wires": [
+                    {
+                        "id": "30e4d7e8801dbe73"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 980,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "bc1605d2db7fbd3e",
+                        "port": 0
+                    }
+                ]
+            },
+            {
+                "x": 980,
+                "y": 160,
+                "wires": [
+                    {
+                        "id": "256a9be0c5a6503f",
+                        "port": 1
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
+        "id": "2201d885ecb7ca8e",
+        "type": "subflow",
+        "name": "Generate sUID",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 160,
+                "y": 140,
+                "wires": [
+                    {
+                        "id": "bbcdc7e05f706b40"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 480,
+                "y": 140,
+                "wires": [
+                    {
+                        "id": "bbcdc7e05f706b40",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
+        "id": "2175488c8fef6d0f",
+        "type": "subflow",
+        "name": "Encrypt",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 80,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "2181013051d848a4"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 320,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "2181013051d848a4",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
+        "id": "d24a56a257d357bf",
+        "type": "subflow",
+        "name": "Decrypt",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 80,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "93a427aaf681a131"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 320,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "93a427aaf681a131",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
+        "id": "f2324d38a803d929",
+        "type": "chronos-config",
+        "name": "config-chronos-scheduler",
+        "latitudeType": "num",
+        "longitudeType": "num",
+        "timezone": "UTC",
+        "timezoneType": "str",
+        "sunPositions": []
+    },
+    {
+        "id": "30e4d7e8801dbe73",
+        "type": "change",
+        "z": "0729b9071d15ddb8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "\"PGPASSWORD=\" & msg.payload.password &\t\" /usr/lib/postgresql/17/bin/psql\" &\t\" -h \" & msg.payload.host &\t\" -d \" & msg.payload.db &\t\" -p \" & msg.payload.port &\t\" -U \" & msg.payload.user &\t\" -t -c \\\"SELECT to_json(current_setting('server_version'))\\\"\"",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 210,
+        "y": 120,
+        "wires": [
+            [
+                "a5a90b2c2adab5a5"
+            ]
+        ]
+    },
+    {
+        "id": "a5a90b2c2adab5a5",
+        "type": "exec",
+        "z": "0729b9071d15ddb8",
+        "command": "",
+        "addpay": "payload",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "Get Postgres version",
+        "x": 460,
+        "y": 120,
+        "wires": [
+            [
+                "256a9be0c5a6503f"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "256a9be0c5a6503f",
+        "type": "switch",
+        "z": "0729b9071d15ddb8",
+        "name": "",
+        "property": "rc.code",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "num"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 670,
+        "y": 120,
+        "wires": [
+            [
+                "bc1605d2db7fbd3e"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "bc1605d2db7fbd3e",
+        "type": "json",
+        "z": "0729b9071d15ddb8",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 850,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bbcdc7e05f706b40",
+        "type": "function",
+        "z": "2201d885ecb7ca8e",
+        "name": "Generate sUID",
+        "func": "const uid = new shortUniqueId({length: 10});\n\nmsg.payload = uid.rnd();\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "shortUniqueId",
+                "module": "short-unique-id"
+            }
+        ],
+        "x": 320,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2181013051d848a4",
+        "type": "function",
+        "z": "2175488c8fef6d0f",
+        "name": "Encrypt",
+        "func": "const message = await openpgp.createMessage({ text: msg.payload });\nconst encrypted = await openpgp.encrypt({\n    message,\n    passwords: env.get(\"SECRET_KEY\"),\n    format: \"armored\"\n});\n\nmsg.payload = encrypted\n    .replace(\"-----BEGIN PGP MESSAGE-----\", \"\")\n    .replace(\"-----END PGP MESSAGE-----\", \"\")\n    .replaceAll(\"\\n\", \"\");\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "crypto",
+                "module": "crypto"
+            },
+            {
+                "var": "openpgp",
+                "module": "openpgp"
+            }
+        ],
+        "x": 200,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "93a427aaf681a131",
+        "type": "function",
+        "z": "d24a56a257d357bf",
+        "name": "Decrypt",
+        "func": "const encryptedMessage = await openpgp.readMessage({\n    armoredMessage: \"-----BEGIN PGP MESSAGE-----\\n\\n\" + msg.payload + \"\\n-----END PGP MESSAGE-----\"\n});\n\nconst decrypted = await openpgp.decrypt({\n    message: encryptedMessage,\n    passwords: env.get(\"SECRET_KEY\"),\n    format: 'utf-8'\n});\n\nmsg.payload = decrypted.data;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "crypto",
+                "module": "crypto"
+            },
+            {
+                "var": "openpgp",
+                "module": "openpgp"
+            }
+        ],
+        "x": 200,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "04a3338ea6876ba8",
+        "type": "http in",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "url": "/hosts",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 120,
+        "y": 340,
+        "wires": [
+            [
+                "b7c3e0dc44065537"
+            ]
+        ]
+    },
+    {
+        "id": "494ff6e20cc5b2fb",
+        "type": "change",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "hosts",
+                "pt": "global",
+                "to": "[\t   $append(\t       $globalContext(\"hosts\"),\t       $merge(\t           [\t               msg.host,\t               {\t                   \"host_id\": msg.host_id,\t                   \"version\": msg.version,\t                   \"password\": msg.payload\t               }\t           ]\t       )\t   )\t]",
+                "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\t    \"host_id\": msg.host_id,\t    \"version\": msg.version\t}",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1580,
+        "y": 320,
+        "wires": [
+            [
+                "14197b68f4f02e26"
+            ]
+        ]
+    },
+    {
+        "id": "14197b68f4f02e26",
+        "type": "http response",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "statusCode": "201",
+        "headers": {},
+        "x": 1780,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "a8d04531ba3b46b8",
+        "type": "inject",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 80,
+        "wires": [
+            [
+                "7808856b2474f429"
+            ]
+        ]
+    },
+    {
+        "id": "7808856b2474f429",
+        "type": "file in",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "filename": "$env(\"DATAPATH\") & \"/hosts.json\"",
+        "filenameType": "jsonata",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 310,
+        "y": 80,
+        "wires": [
+            [
+                "9b55f9b98fa0a37f"
+            ]
+        ]
+    },
+    {
+        "id": "9b55f9b98fa0a37f",
+        "type": "json",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 470,
+        "y": 80,
+        "wires": [
+            [
+                "1c1b593d859cb9c1"
+            ]
+        ]
+    },
+    {
+        "id": "1c1b593d859cb9c1",
+        "type": "change",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "hosts",
+                "pt": "global",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 650,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "07d9095b8a0ee034",
+        "type": "inject",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "30",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 160,
+        "wires": [
+            [
+                "c9df6ccaef6ddb1e"
+            ]
+        ]
+    },
+    {
+        "id": "207da7a1898f7d28",
+        "type": "file",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "filename": "$env(\"DATAPATH\") & \"/hosts.json\"",
+        "filenameType": "jsonata",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 540,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c9df6ccaef6ddb1e",
+        "type": "change",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "hosts",
+                "tot": "global"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 330,
+        "y": 160,
+        "wires": [
+            [
+                "207da7a1898f7d28"
+            ]
+        ]
+    },
+    {
+        "id": "dd598ad3fcf49b90",
+        "type": "http in",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "url": "/hosts",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 120,
+        "y": 480,
+        "wires": [
+            [
+                "1edbad582e5e0626"
+            ]
+        ]
+    },
+    {
+        "id": "1edbad582e5e0626",
+        "type": "change",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\t    \"hosts\": [$globalContext(\"hosts\")]\t}",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 330,
+        "y": 480,
+        "wires": [
+            [
+                "7fe8adab82ccd2b4"
+            ]
+        ]
+    },
+    {
+        "id": "7fe8adab82ccd2b4",
+        "type": "http response",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 510,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "7ba4082427168aea",
+        "type": "http in",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "url": "/hosts/:host_id",
+        "method": "delete",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 150,
+        "y": 760,
+        "wires": [
+            [
+                "4af148f351bc5ad6"
+            ]
+        ]
+    },
+    {
+        "id": "4af148f351bc5ad6",
+        "type": "change",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "hosts",
+                "pt": "global",
+                "to": "(\t    $hosts := $globalContext(\"hosts\");\t    $host_id := msg.req.params.host_id;\t    [$hosts[host_id!=$host_id]]\t)",
+                "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 400,
+        "y": 760,
+        "wires": [
+            [
+                "6b1f42ca43b9e828"
+            ]
+        ]
+    },
+    {
+        "id": "6b1f42ca43b9e828",
+        "type": "http response",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "statusCode": "204",
+        "headers": {},
+        "x": 600,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "ea40de16fbe4f99d",
+        "type": "http in",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "url": "/hosts/:host_id",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 140,
+        "y": 580,
+        "wires": [
+            [
+                "ac719e4444af7272"
+            ]
+        ]
+    },
+    {
+        "id": "ac719e4444af7272",
+        "type": "change",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "(\t    $hosts := $globalContext(\"hosts\");\t    $host_id := msg.req.params.host_id;\t    $hosts[host_id=$host_id]\t)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 370,
+        "y": 580,
+        "wires": [
+            [
+                "796b62310bcd6f85"
+            ]
+        ]
+    },
+    {
+        "id": "d2376aa5b952b31b",
+        "type": "http response",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 750,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "796b62310bcd6f85",
+        "type": "switch",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nempty"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 570,
+        "y": 580,
+        "wires": [
+            [
+                "d2376aa5b952b31b"
+            ],
+            [
+                "347f7e798af4f261"
+            ]
+        ]
+    },
+    {
+        "id": "347f7e798af4f261",
+        "type": "change",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"code\":404,\"message\":\"Host not found\"}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 790,
+        "y": 620,
+        "wires": [
+            [
+                "b309adccc8cba0fe"
+            ]
+        ]
+    },
+    {
+        "id": "b309adccc8cba0fe",
+        "type": "http response",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "statusCode": "404",
+        "headers": {},
+        "x": 980,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "fc86c37f0968849c",
+        "type": "http in",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "url": "/hosts/:host_id",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 150,
+        "y": 900,
+        "wires": [
+            [
+                "4e3de88ecc3341e2"
+            ]
+        ]
+    },
+    {
+        "id": "3d6150bff1beaf0f",
+        "type": "change",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "hosts",
+                "pt": "global",
+                "to": "(\t    $hosts := $globalContext(\"hosts\");\t    $host_id := msg.req.params.host_id;\t    $payload := msg.host;\t    $version := msg.version;\t    $password := msg.payload;\t    $hosts ~>| *[host_id=$host_id] |\t        {\t            \"type\": $payload.type,\t            \"host\": $payload.host,\t            \"port\": $payload.port,\t            \"db\": $payload.db,\t            \"user\": $payload.user,\t            \"password\": $password,\t            \"version\": $version\t        } |\t)",
+                "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"code\":200,\"message\":\"Host updated\"}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1420,
+        "y": 820,
+        "wires": [
+            [
+                "7f8a901561dfa248"
+            ]
+        ]
+    },
+    {
+        "id": "7f8a901561dfa248",
+        "type": "http response",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1610,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "4e3de88ecc3341e2",
+        "type": "switch",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "property": "(\t   $hosts := $globalContext(\"hosts\");\t   $host_id := msg.req.params.host_id;\t   $hosts[host_id=$host_id] \t)",
+        "propertyType": "jsonata",
+        "rules": [
+            {
+                "t": "nempty"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 370,
+        "y": 900,
+        "wires": [
+            [
+                "48ad2b7d68888bb6"
+            ],
+            [
+                "cbf1a17a50142063"
+            ]
+        ]
+    },
+    {
+        "id": "cbf1a17a50142063",
+        "type": "change",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"code\":404,\"message\":\"Host not found\"}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 370,
+        "y": 980,
+        "wires": [
+            [
+                "05a10c545e8b4b65"
+            ]
+        ]
+    },
+    {
+        "id": "05a10c545e8b4b65",
+        "type": "http response",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "statusCode": "404",
+        "headers": {},
+        "x": 560,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "b7c3e0dc44065537",
+        "type": "change",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "host",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 320,
+        "y": 340,
+        "wires": [
+            [
+                "2aa0f9e6a6902d8f"
+            ]
+        ]
+    },
+    {
+        "id": "2aa0f9e6a6902d8f",
+        "type": "subflow:0729b9071d15ddb8",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "x": 530,
+        "y": 340,
+        "wires": [
+            [
+                "1cfcdb60e92283a6"
+            ],
+            [
+                "78abb916658613fb"
+            ]
+        ]
+    },
+    {
+        "id": "54d0435401b98246",
+        "type": "subflow:0729b9071d15ddb8",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "x": 780,
+        "y": 880,
+        "wires": [
+            [
+                "50a179114995ea51"
+            ],
+            [
+                "370bf4a1341220f9"
+            ]
+        ]
+    },
+    {
+        "id": "48ad2b7d68888bb6",
+        "type": "change",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "host",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 580,
+        "y": 880,
+        "wires": [
+            [
+                "54d0435401b98246"
+            ]
+        ]
+    },
+    {
+        "id": "370bf4a1341220f9",
+        "type": "change",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"code\":500,\"message\":\"Unable to get host version\"}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1010,
+        "y": 920,
+        "wires": [
+            [
+                "df5f606aa34d3ac2"
+            ]
+        ]
+    },
+    {
+        "id": "df5f606aa34d3ac2",
+        "type": "http response",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "statusCode": "500",
+        "headers": {},
+        "x": 1200,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "1cfcdb60e92283a6",
+        "type": "change",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "version",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 750,
+        "y": 320,
+        "wires": [
+            [
+                "e24ff22c421ebeb6"
+            ]
+        ]
+    },
+    {
+        "id": "e24ff22c421ebeb6",
+        "type": "subflow:2201d885ecb7ca8e",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "x": 960,
+        "y": 320,
+        "wires": [
+            [
+                "233ae8892b92f7d7"
+            ]
+        ]
+    },
+    {
+        "id": "6f12aaa15da22163",
+        "type": "subflow:2175488c8fef6d0f",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "x": 1380,
+        "y": 320,
+        "wires": [
+            [
+                "494ff6e20cc5b2fb"
+            ]
+        ]
+    },
+    {
+        "id": "233ae8892b92f7d7",
+        "type": "change",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "host_id",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "host.password",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1180,
+        "y": 320,
+        "wires": [
+            [
+                "6f12aaa15da22163"
+            ]
+        ]
+    },
+    {
+        "id": "c0bc50b054a51092",
+        "type": "subflow:2175488c8fef6d0f",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "x": 1220,
+        "y": 820,
+        "wires": [
+            [
+                "3d6150bff1beaf0f"
+            ]
+        ]
+    },
+    {
+        "id": "50a179114995ea51",
+        "type": "change",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "version",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "host.password",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1020,
+        "y": 820,
+        "wires": [
+            [
+                "c0bc50b054a51092"
+            ]
+        ]
+    },
+    {
+        "id": "78abb916658613fb",
+        "type": "change",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"code\":500,\"message\":\"Unable to get host version\"}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 750,
+        "y": 380,
+        "wires": [
+            [
+                "e6bbd08be63ff19f"
+            ]
+        ]
+    },
+    {
+        "id": "e6bbd08be63ff19f",
+        "type": "http response",
+        "z": "25b50a64703b5dbf",
+        "name": "",
+        "statusCode": "500",
+        "headers": {},
+        "x": 940,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "c8cea02df6bb189b",
+        "type": "http in",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "url": "/hosts/:host_id/dump",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 210,
+        "y": 280,
+        "wires": [
+            [
+                "3a82df1cdf667e04"
+            ]
+        ]
+    },
+    {
+        "id": "2c78b8314343bba0",
+        "type": "catch",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "scope": [
+            "f41e372983a05587"
+        ],
+        "uncaught": false,
+        "x": 140,
+        "y": 1000,
+        "wires": [
+            [
+                "3d7d66dc0c700a3c"
+            ]
+        ]
+    },
+    {
+        "id": "3c398b59a6cd9e1f",
+        "type": "http response",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "statusCode": "500",
+        "headers": {},
+        "x": 520,
+        "y": 1000,
+        "wires": []
+    },
+    {
+        "id": "3d7d66dc0c700a3c",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\t    \"code\": 500,\t    \"message\": \"Dump file for `\" & msg.req.params.dump_id & \"` not found\"\t}",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 330,
+        "y": 1000,
+        "wires": [
+            [
+                "3c398b59a6cd9e1f"
+            ]
+        ]
+    },
+    {
+        "id": "8f689124bc7e71a2",
+        "type": "http in",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "url": "/hosts/:host_id/dumps/:dump_id",
+        "method": "delete",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 250,
+        "y": 1240,
+        "wires": [
+            [
+                "f9f030ceb9d947f1"
+            ]
+        ]
+    },
+    {
+        "id": "e05b84565917347c",
+        "type": "http response",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "statusCode": "204",
+        "headers": {},
+        "x": 1660,
+        "y": 1200,
+        "wires": []
+    },
+    {
+        "id": "f1d0c8a2d222efff",
+        "type": "inject",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 990,
+        "y": 100,
+        "wires": [
+            [
+                "537473b3779b1ac9"
+            ]
+        ]
+    },
+    {
+        "id": "ad410abf1124440f",
+        "type": "chronos-scheduler",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "config": "f2324d38a803d929",
+        "schedule": [
+            {
+                "trigger": {
+                    "type": "crontab",
+                    "value": "0 0 1 1 *"
+                },
+                "output": {
+                    "type": "msg",
+                    "property": {
+                        "name": "payload",
+                        "type": "date",
+                        "value": ""
+                    }
+                }
+            }
+        ],
+        "disabled": false,
+        "multiPort": false,
+        "nextEventPort": false,
+        "delayOnStart": true,
+        "onStartDelay": 0.1,
+        "outputs": 1,
+        "x": 1580,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "537473b3779b1ac9",
+        "type": "switch",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "property": "SCHEDULE_DUMP",
+        "propertyType": "env",
+        "rules": [
+            {
+                "t": "nempty"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 1170,
+        "y": 100,
+        "wires": [
+            [
+                "6ad3851bf3c5b22f"
+            ],
+            [
+                "e4b4fba8e41f8aa3"
+            ]
+        ]
+    },
+    {
+        "id": "6ad3851bf3c5b22f",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "[\t    {\t        \"type\": \"crontab\",\t        \"value\": $env(\"SCHEDULE_DUMP\")\t    }\t]",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1360,
+        "y": 60,
+        "wires": [
+            [
+                "ad410abf1124440f"
+            ]
+        ]
+    },
+    {
+        "id": "e4b4fba8e41f8aa3",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "false",
+                "tot": "bool"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1360,
+        "y": 140,
+        "wires": [
+            [
+                "ad410abf1124440f"
+            ]
+        ]
+    },
+    {
+        "id": "fde4863213fc7116",
+        "type": "comment",
+        "z": "45b89d4ab1bd2d20",
+        "name": "Upload dump file.",
+        "info": "",
+        "x": 170,
+        "y": 2300,
+        "wires": []
+    },
+    {
+        "id": "f24eea3037d6dc26",
+        "type": "comment",
+        "z": "45b89d4ab1bd2d20",
+        "name": "Remove dump file.",
+        "info": "",
+        "x": 170,
+        "y": 1180,
+        "wires": []
+    },
+    {
+        "id": "874c002e10c78b82",
+        "type": "file",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "filename": "payload.dump",
+        "filenameType": "msg",
+        "appendNewline": false,
+        "createDir": false,
+        "overwriteFile": "delete",
+        "encoding": "setbymsg",
+        "x": 920,
+        "y": 1220,
+        "wires": [
+            [
+                "462d56d9a8bd6474"
+            ]
+        ]
+    },
+    {
+        "id": "a6e5d58469dc061b",
+        "type": "comment",
+        "z": "45b89d4ab1bd2d20",
+        "name": "Create dump.",
+        "info": "",
+        "x": 150,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "b99064a1fbb08599",
+        "type": "comment",
+        "z": "45b89d4ab1bd2d20",
+        "name": "Schedule create dump.",
+        "info": "",
+        "x": 1020,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "d5e2ded334c16c1f",
+        "type": "http response",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "statusCode": "404",
+        "headers": {},
+        "x": 660,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "69f640861c5dc55f",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"code\":404,\"message\":\"Host not found\"}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 470,
+        "y": 340,
+        "wires": [
+            [
+                "d5e2ded334c16c1f"
+            ]
+        ]
+    },
+    {
+        "id": "2535c213feda5d43",
+        "type": "switch",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nempty"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 670,
+        "y": 280,
+        "wires": [
+            [
+                "85e2e8da0a11a955"
+            ],
+            [
+                "69f640861c5dc55f"
+            ]
+        ]
+    },
+    {
+        "id": "3a82df1cdf667e04",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "(\t    $hosts := $globalContext(\"hosts\");\t    $host_id := msg.req.params.host_id;\t    $hosts[host_id=$host_id]\t)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 470,
+        "y": 280,
+        "wires": [
+            [
+                "2535c213feda5d43"
+            ]
+        ]
+    },
+    {
+        "id": "050484080614d876",
+        "type": "subflow:0729b9071d15ddb8",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "x": 410,
+        "y": 480,
+        "wires": [
+            [
+                "452c9320ae7e011a"
+            ],
+            [
+                "7ded365f5b44ece4"
+            ]
+        ]
+    },
+    {
+        "id": "2ee0e1ae896cb112",
+        "type": "http response",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "statusCode": "500",
+        "headers": {},
+        "x": 360,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "7ded365f5b44ece4",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"code\":500,\"message\":\"Unable to get host version\"}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 170,
+        "y": 560,
+        "wires": [
+            [
+                "2ee0e1ae896cb112"
+            ]
+        ]
+    },
+    {
+        "id": "2c8b84cb63d2ce1a",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "dump_filename",
+                "pt": "msg",
+                "to": "$millis()\t& \"_\" & msg.host.host_id\t& \"_\" & msg.host.type\t& \"_\" & msg.host.host\t& \"_\" & msg.version\t& \"_\" & msg.host.db\t& \".sql\"",
+                "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "\"PGPASSWORD=\" & msg.host.password\t& \" /usr/lib/postgresql/\" & $split(msg.version, \".\")[0] & \"/bin/pg_dump\"\t& \" -h \" & msg.host.host\t& \" -d \" & msg.host.db\t& \" -U \" & msg.host.user\t& \" -p \" & msg.host.port\t& \" --create --clean --if-exists\"\t& \" -f \" & msg.directory & \"/\" & msg.dump_filename",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1520,
+        "y": 480,
+        "wires": [
+            [
+                "af896ee270ce2c41"
+            ]
+        ]
+    },
+    {
+        "id": "af896ee270ce2c41",
+        "type": "exec",
+        "z": "45b89d4ab1bd2d20",
+        "command": "",
+        "addpay": "payload",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "pg_dump",
+        "x": 1720,
+        "y": 480,
+        "wires": [
+            [
+                "a2e3ba87db9fa153"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "a2e3ba87db9fa153",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "\"cd \" & msg.directory\t& \" && tar czf ./\" & msg.dump_filename & \".tar.gz \" & msg.dump_filename\t& \" && rm \" &  msg.directory & \"/\" & msg.dump_filename",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 170,
+        "y": 680,
+        "wires": [
+            [
+                "d92cbb73015a594c"
+            ]
+        ]
+    },
+    {
+        "id": "d92cbb73015a594c",
+        "type": "exec",
+        "z": "45b89d4ab1bd2d20",
+        "command": "",
+        "addpay": "payload",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "Compress Dump",
+        "x": 390,
+        "y": 680,
+        "wires": [
+            [
+                "0682875346e7669a"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "0682875346e7669a",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "dump_filename",
+                "pt": "msg",
+                "to": "msg.dump_filename & \".tar.gz\"",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 640,
+        "y": 680,
+        "wires": [
+            [
+                "897d561bccd0c667"
+            ]
+        ]
+    },
+    {
+        "id": "897d561bccd0c667",
+        "type": "fs-ops-size",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "path": "directory",
+        "pathType": "msg",
+        "filename": "dump_filename",
+        "filenameType": "msg",
+        "size": "filesize",
+        "sizeType": "msg",
+        "x": 860,
+        "y": 680,
+        "wires": [
+            [
+                "bf6b282a5391dc7c"
+            ]
+        ]
+    },
+    {
+        "id": "bf6b282a5391dc7c",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "dumps",
+                "pt": "global",
+                "to": "[\t   $append(\t       $globalContext(\"dumps\"),\t       [\t           {\t               \"host_id\": msg.host.host_id,\t               \"dump_id\": msg.dump_id,\t               \"created_at\": msg.created_at,\t               \"dump_path\": msg.directory & \"/\" & msg.dump_filename,\t               \"filesize\": msg.filesize\t            }\t        ]\t    )\t]",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1060,
+        "y": 680,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "82b5eff5b0c4397d",
+        "type": "http response",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "statusCode": "202",
+        "headers": {},
+        "x": 1260,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "022f951c04a2a1b8",
+        "type": "fs-ops-mkdir",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "path": "path",
+        "pathType": "msg",
+        "dirname": "payload",
+        "dirnameType": "msg",
+        "recursive": true,
+        "mode": "755",
+        "fullpath": "directory",
+        "fullpathType": "msg",
+        "x": 1300,
+        "y": 480,
+        "wires": [
+            [
+                "2c8b84cb63d2ce1a"
+            ]
+        ]
+    },
+    {
+        "id": "55d51c7ae03d7910",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "dump_id",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "path",
+                "pt": "msg",
+                "to": "$env(\"DUMP_DIRECTORY\")\t& \"/\" & msg.host.host_id\t& \"/\" & $fromMillis($millis(), \"[Y0001]\")\t& \"/\" & $fromMillis($millis(), \"[M01]\")",
+                "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "created_at",
+                "pt": "msg",
+                "to": "$now()",
+                "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$fromMillis($millis(), \"[D01]\")",
+                "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "hosts",
+                "pt": "global",
+                "to": "(\t    $hosts := $globalContext(\"hosts\");\t    $host_id := msg.host.host_id;\t    $version := msg.version;\t    $hosts ~>| *[host_id=$host_id] |\t        {\t            \"version\": $version\t        } |\t)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1080,
+        "y": 480,
+        "wires": [
+            [
+                "022f951c04a2a1b8",
+                "fbec66220ffda266"
+            ]
+        ]
+    },
+    {
+        "id": "c6a254524ba91772",
+        "type": "subflow:d24a56a257d357bf",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "x": 1100,
+        "y": 280,
+        "wires": [
+            [
+                "8a1156238f18cfb4"
+            ]
+        ]
+    },
+    {
+        "id": "85e2e8da0a11a955",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "host",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg",
+                "dc": true
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "host.password",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 900,
+        "y": 280,
+        "wires": [
+            [
+                "c6a254524ba91772"
+            ]
+        ]
+    },
+    {
+        "id": "8a1156238f18cfb4",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "host.password",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "host",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 180,
+        "y": 480,
+        "wires": [
+            [
+                "050484080614d876"
+            ]
+        ]
+    },
+    {
+        "id": "c5a307a2f156095e",
+        "type": "inject",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 150,
+        "y": 40,
+        "wires": [
+            [
+                "cce619e5cf58e355"
+            ]
+        ]
+    },
+    {
+        "id": "cce619e5cf58e355",
+        "type": "file in",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "filename": "$env(\"DATAPATH\") & \"/dumps.json\"",
+        "filenameType": "jsonata",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 330,
+        "y": 40,
+        "wires": [
+            [
+                "33d9480787413f95"
+            ]
+        ]
+    },
+    {
+        "id": "33d9480787413f95",
+        "type": "json",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 490,
+        "y": 40,
+        "wires": [
+            [
+                "0f0d5666b0988cf7"
+            ]
+        ]
+    },
+    {
+        "id": "0f0d5666b0988cf7",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "dumps",
+                "pt": "global",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 680,
+        "y": 40,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a45a3d5df65776fd",
+        "type": "inject",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "30",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 150,
+        "y": 120,
+        "wires": [
+            [
+                "b825a8149c76c56f"
+            ]
+        ]
+    },
+    {
+        "id": "3a08583b614de82a",
+        "type": "file",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "filename": "$env(\"DATAPATH\") & \"/dumps.json\"",
+        "filenameType": "jsonata",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 560,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b825a8149c76c56f",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "dumps",
+                "tot": "global"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 350,
+        "y": 120,
+        "wires": [
+            [
+                "3a08583b614de82a"
+            ]
+        ]
+    },
+    {
+        "id": "5de7a6578aa45c14",
+        "type": "http in",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "url": "/hosts/:host_id/dumps/:dump_id",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 240,
+        "y": 860,
+        "wires": [
+            [
+                "f25fa1b2e80672a4"
+            ]
+        ]
+    },
+    {
+        "id": "531e10e667c56e04",
+        "type": "http response",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "statusCode": "",
+        "headers": {
+            "Content-Type": "application/x-gzip"
+        },
+        "x": 1570,
+        "y": 860,
+        "wires": []
+    },
+    {
+        "id": "f41e372983a05587",
+        "type": "file in",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "filename": "filename",
+        "filenameType": "msg",
+        "format": "",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 1170,
+        "y": 860,
+        "wires": [
+            [
+                "e597ac15671bbc9a"
+            ]
+        ]
+    },
+    {
+        "id": "7cb09f71798500cb",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "filename",
+                "pt": "msg",
+                "to": "payload.dump_path",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 960,
+        "y": 860,
+        "wires": [
+            [
+                "f41e372983a05587"
+            ]
+        ]
+    },
+    {
+        "id": "b496e7f26e963cfb",
+        "type": "comment",
+        "z": "45b89d4ab1bd2d20",
+        "name": "Get a dump's content.",
+        "info": "",
+        "x": 180,
+        "y": 800,
+        "wires": []
+    },
+    {
+        "id": "e597ac15671bbc9a",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "headers",
+                "pt": "msg",
+                "to": "{\t    \"Content-Disposition\": \"attachment; filename=\\\"\" & $split(msg.filename, \"/\")[-1]  & \"\\\"\"\t}",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1380,
+        "y": 860,
+        "wires": [
+            [
+                "531e10e667c56e04"
+            ]
+        ]
+    },
+    {
+        "id": "e4d7d6064b516f51",
+        "type": "switch",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nempty"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 730,
+        "y": 860,
+        "wires": [
+            [
+                "7cb09f71798500cb"
+            ],
+            [
+                "3958ef49da4e467a"
+            ]
+        ]
+    },
+    {
+        "id": "f25fa1b2e80672a4",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "(\t    $dumps := $globalContext(\"dumps\");\t    $dump_id := msg.req.params.dump_id;\t    $host_id := msg.req.params.host_id;\t    $dumps[dump_id=$dump_id and host_id=$host_id]\t)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 530,
+        "y": 860,
+        "wires": [
+            [
+                "e4d7d6064b516f51"
+            ]
+        ]
+    },
+    {
+        "id": "1a17066634dc1734",
+        "type": "http response",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "statusCode": "404",
+        "headers": {},
+        "x": 740,
+        "y": 940,
+        "wires": []
+    },
+    {
+        "id": "3958ef49da4e467a",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"code\":404,\"message\":\"Dump not found\"}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 550,
+        "y": 940,
+        "wires": [
+            [
+                "1a17066634dc1734"
+            ]
+        ]
+    },
+    {
+        "id": "f9f030ceb9d947f1",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "(\t    $dumps := $globalContext(\"dumps\");\t    $dump_id := msg.req.params.dump_id;\t    $host_id := msg.req.params.host_id;\t    $dumps[dump_id=$dump_id and host_id=$host_id]\t)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 550,
+        "y": 1240,
+        "wires": [
+            [
+                "9a2ab2b91a8059c6"
+            ]
+        ]
+    },
+    {
+        "id": "9a2ab2b91a8059c6",
+        "type": "switch",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nempty"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 750,
+        "y": 1240,
+        "wires": [
+            [
+                "874c002e10c78b82"
+            ],
+            [
+                "5de7b1a0847f70fa"
+            ]
+        ]
+    },
+    {
+        "id": "827b879ac15bb262",
+        "type": "http response",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "statusCode": "404",
+        "headers": {},
+        "x": 780,
+        "y": 1320,
+        "wires": []
+    },
+    {
+        "id": "5de7b1a0847f70fa",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"code\":404,\"message\":\"Dump not found\"}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 590,
+        "y": 1320,
+        "wires": [
+            [
+                "827b879ac15bb262"
+            ]
+        ]
+    },
+    {
+        "id": "fd032def980394e4",
+        "type": "exec",
+        "z": "45b89d4ab1bd2d20",
+        "command": "rmdir -p --ignore-fail-on-non-empty",
+        "addpay": "payload",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "",
+        "x": 1400,
+        "y": 1220,
+        "wires": [
+            [
+                "e05b84565917347c"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "462d56d9a8bd6474",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "(\t    $items := $split(msg.payload.dump, \"/\");\t    $l := $count($items) - 1;\t    $join($filter($items, function($v, $i) {\t        $i < $l\t    }), \"/\")\t)",
+                "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "dumps",
+                "pt": "global",
+                "to": "(\t    $dumps := $globalContext(\"dumps\");\t    $host_id := msg.req.params.host_id;\t    $dump_id := msg.req.params.dump_id;\t    [$dumps[host_id!=$host_id or dump_id!=$dump_id]]\t)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1120,
+        "y": 1220,
+        "wires": [
+            [
+                "fd032def980394e4"
+            ]
+        ]
+    },
+    {
+        "id": "a6352f5dd618b6cc",
+        "type": "catch",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "scope": [
+            "874c002e10c78b82"
+        ],
+        "uncaught": false,
+        "x": 960,
+        "y": 1340,
+        "wires": [
+            [
+                "68c1fc1199efd025"
+            ]
+        ]
+    },
+    {
+        "id": "8d224c7bcfc32c57",
+        "type": "http response",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "statusCode": "500",
+        "headers": {},
+        "x": 1340,
+        "y": 1340,
+        "wires": []
+    },
+    {
+        "id": "68c1fc1199efd025",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\t    \"code\": 500,\t    \"message\": \"Unable to delete dump file\"\t}",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1150,
+        "y": 1340,
+        "wires": [
+            [
+                "8d224c7bcfc32c57"
+            ]
+        ]
+    },
+    {
+        "id": "42dae277b4cf2025",
+        "type": "http in",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "url": "/hosts/:host_id/dumps",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 210,
+        "y": 1520,
+        "wires": [
+            [
+                "16afb658e9377ecf"
+            ]
+        ]
+    },
+    {
+        "id": "16afb658e9377ecf",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "(\t    $dumps := $globalContext(\"dumps\");\t    $host_id := msg.req.params.host_id;\t    {\t        \"dumps\": [$dumps[host_id=$host_id]]\t    }\t)\t",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 470,
+        "y": 1520,
+        "wires": [
+            [
+                "60592d4c2e7f8495"
+            ]
+        ]
+    },
+    {
+        "id": "60592d4c2e7f8495",
+        "type": "http response",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 650,
+        "y": 1520,
+        "wires": []
+    },
+    {
+        "id": "b72c33954e0f876f",
+        "type": "comment",
+        "z": "45b89d4ab1bd2d20",
+        "name": "List dump files.",
+        "info": "",
+        "x": 160,
+        "y": 1460,
+        "wires": []
+    },
+    {
+        "id": "7df0b57e82b9b9cd",
+        "type": "subflow:2201d885ecb7ca8e",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "x": 860,
+        "y": 480,
+        "wires": [
+            [
+                "55d51c7ae03d7910"
+            ]
+        ]
+    },
+    {
+        "id": "452c9320ae7e011a",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "version",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 650,
+        "y": 480,
+        "wires": [
+            [
+                "7df0b57e82b9b9cd"
+            ]
+        ]
+    },
+    {
+        "id": "fbec66220ffda266",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\t    \"dump_id\": msg.dump_id,\t    \"created_at\": msg.created_at\t}",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1070,
+        "y": 400,
+        "wires": [
+            [
+                "82b5eff5b0c4397d"
+            ]
+        ]
+    },
+    {
+        "id": "567d92f5a19ba3d8",
+        "type": "http in",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "url": "/hosts/:host_id/dumps/:dump_id/restore",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 270,
+        "y": 1720,
+        "wires": [
+            [
+                "55e8e76af6e8f21f"
+            ]
+        ]
+    },
+    {
+        "id": "55e8e76af6e8f21f",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "(\t    $dumps := $globalContext(\"dumps\");\t    $dump_id := msg.req.params.dump_id;\t    $host_id := msg.req.params.host_id;\t    $dumps[dump_id=$dump_id and host_id=$host_id]\t)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 590,
+        "y": 1720,
+        "wires": [
+            [
+                "73b5ea8984dd276a"
+            ]
+        ]
+    },
+    {
+        "id": "73b5ea8984dd276a",
+        "type": "switch",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nempty"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 790,
+        "y": 1720,
+        "wires": [
+            [
+                "70f51bdc1cc8bf33"
+            ],
+            [
+                "8872cf0a12433c07"
+            ]
+        ]
+    },
+    {
+        "id": "7dcb364a57d7bb19",
+        "type": "http response",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "statusCode": "404",
+        "headers": {},
+        "x": 740,
+        "y": 1780,
+        "wires": []
+    },
+    {
+        "id": "8872cf0a12433c07",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"code\":404,\"message\":\"Dump not found\"}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 550,
+        "y": 1780,
+        "wires": [
+            [
+                "7dcb364a57d7bb19"
+            ]
+        ]
+    },
+    {
+        "id": "70f51bdc1cc8bf33",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "host",
+                "pt": "msg",
+                "to": "(\t    $hosts := $globalContext(\"hosts\");\t    $host_id := msg.req.params.host_id;\t    $hosts[host_id=$host_id]\t)",
+                "tot": "jsonata",
+                "dc": true
+            },
+            {
+                "t": "set",
+                "p": "dump",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg",
+                "dc": true
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "host.password",
+                "tot": "msg",
+                "dc": true
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1000,
+        "y": 1720,
+        "wires": [
+            [
+                "7be784c8718c316c"
+            ]
+        ]
+    },
+    {
+        "id": "7be784c8718c316c",
+        "type": "subflow:d24a56a257d357bf",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "x": 1200,
+        "y": 1720,
+        "wires": [
+            [
+                "775f77b558758ef9"
+            ]
+        ]
+    },
+    {
+        "id": "775f77b558758ef9",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "host.password",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "host",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 180,
+        "y": 1920,
+        "wires": [
+            [
+                "2c1872f028c9a516"
+            ]
+        ]
+    },
+    {
+        "id": "2c1872f028c9a516",
+        "type": "subflow:0729b9071d15ddb8",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "x": 410,
+        "y": 1920,
+        "wires": [
+            [
+                "d26a8b90386c2f94"
+            ],
+            [
+                "88010a4300888982"
+            ]
+        ]
+    },
+    {
+        "id": "88010a4300888982",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"code\":500,\"message\":\"Unable to get host version\"}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 170,
+        "y": 2000,
+        "wires": [
+            [
+                "a27d792d3601fdb2"
+            ]
+        ]
+    },
+    {
+        "id": "a27d792d3601fdb2",
+        "type": "http response",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "statusCode": "500",
+        "headers": {},
+        "x": 360,
+        "y": 2000,
+        "wires": []
+    },
+    {
+        "id": "d26a8b90386c2f94",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "version",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "hosts",
+                "pt": "global",
+                "to": "(\t   $hosts := $globalContext(\"hosts\");\t   $host_id := msg.host.host_id;\t   $version := msg.version;\t   $hosts ~>| *[host_id=$host_id] |\t        {\t       \"version\": $version\t        \t   } |\t\t)",
+                "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "msg.dump.dump_path & \" --directory=/tmp\"",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 660,
+        "y": 1920,
+        "wires": [
+            [
+                "529f1801af16d6dc"
+            ]
+        ]
+    },
+    {
+        "id": "70a55317710b9cc6",
+        "type": "comment",
+        "z": "45b89d4ab1bd2d20",
+        "name": "Retore dump file.",
+        "info": "",
+        "x": 160,
+        "y": 1660,
+        "wires": []
+    },
+    {
+        "id": "529f1801af16d6dc",
+        "type": "exec",
+        "z": "45b89d4ab1bd2d20",
+        "command": "tar xf",
+        "addpay": "payload",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "Extract dump archive",
+        "x": 900,
+        "y": 1920,
+        "wires": [
+            [
+                "6ed6934a1c1d85e9"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "6ed6934a1c1d85e9",
+        "type": "switch",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "property": "rc.code",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "num"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 150,
+        "y": 2100,
+        "wires": [
+            [
+                "45b740aed7eab354"
+            ],
+            [
+                "b32ead2fbd3afe2d"
+            ]
+        ]
+    },
+    {
+        "id": "05f06c1b8d817e24",
+        "type": "exec",
+        "z": "45b89d4ab1bd2d20",
+        "command": "",
+        "addpay": "payload",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "Restore database",
+        "x": 590,
+        "y": 2100,
+        "wires": [
+            [
+                "448456f584122772"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "45b740aed7eab354",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "dump_filename",
+                "pt": "msg",
+                "to": "$replace($split(msg.dump.dump_path, \"/\")[-1], \".tar.gz\", \"\")",
+                "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "\"PGPASSWORD=\" & msg.host.password\t& \" /usr/lib/postgresql/\" & $split(msg.version, \".\")[0] & \"/bin/psql\"\t& \" -h \" & msg.host.host\t& \" -d postgres\"\t& \" -U \" & msg.host.user\t& \" -p \" & msg.host.port\t& \" < /tmp/\" & msg.dump_filename",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 360,
+        "y": 2100,
+        "wires": [
+            [
+                "05f06c1b8d817e24"
+            ]
+        ]
+    },
+    {
+        "id": "fe976bbe0b8fbd9d",
+        "type": "exec",
+        "z": "45b89d4ab1bd2d20",
+        "command": "rm",
+        "addpay": "payload",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "Remove the extract",
+        "x": 1050,
+        "y": 2100,
+        "wires": [
+            [],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "448456f584122772",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "\"/tmp/\" & msg.dump_filename",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 810,
+        "y": 2080,
+        "wires": [
+            [
+                "fe976bbe0b8fbd9d",
+                "ff3b6e5bc467a9f1"
+            ]
+        ]
+    },
+    {
+        "id": "ff3b6e5bc467a9f1",
+        "type": "http response",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 990,
+        "y": 2220,
+        "wires": []
+    },
+    {
+        "id": "421c6f383934b749",
+        "type": "http response",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "statusCode": "500",
+        "headers": {},
+        "x": 360,
+        "y": 2180,
+        "wires": []
+    },
+    {
+        "id": "b32ead2fbd3afe2d",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"code\":500,\"message\":\"Unable to extract dump archive\"}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 170,
+        "y": 2180,
+        "wires": [
+            [
+                "421c6f383934b749"
+            ]
+        ]
+    },
+    {
+        "id": "36b018f886a402a3",
+        "type": "http in",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "url": "/hosts/:host_id/upload",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 210,
+        "y": 2380,
+        "wires": [
+            [
+                "de271498ec25867e"
+            ]
+        ]
+    },
+    {
+        "id": "c52733dca59d016d",
+        "type": "http response",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1810,
+        "y": 2520,
+        "wires": []
+    },
+    {
+        "id": "a1cd804ce4bdca4a",
+        "type": "switch",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "property": "req.headers.content-type",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "application/gzip",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 870,
+        "y": 2380,
+        "wires": [
+            [
+                "f9b1501cc18854d4"
+            ],
+            [
+                "821c0b142afca531"
+            ]
+        ]
+    },
+    {
+        "id": "f9b1501cc18854d4",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "host",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg",
+                "dc": true
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 160,
+        "y": 2520,
+        "wires": [
+            [
+                "d0c953477a0b6438"
+            ]
+        ]
+    },
+    {
+        "id": "de271498ec25867e",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "(\t    $hosts := $globalContext(\"hosts\");\t    $host_id := msg.req.params.host_id;\t    $hosts[host_id=$host_id]\t)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 470,
+        "y": 2380,
+        "wires": [
+            [
+                "d147458375680810"
+            ]
+        ]
+    },
+    {
+        "id": "d147458375680810",
+        "type": "switch",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nempty"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 670,
+        "y": 2380,
+        "wires": [
+            [
+                "a1cd804ce4bdca4a"
+            ],
+            [
+                "469ef88380792a31"
+            ]
+        ]
+    },
+    {
+        "id": "9fa55efe331df0d3",
+        "type": "http response",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "statusCode": "404",
+        "headers": {},
+        "x": 660,
+        "y": 2440,
+        "wires": []
+    },
+    {
+        "id": "469ef88380792a31",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"code\":404,\"message\":\"Host not found\"}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 470,
+        "y": 2440,
+        "wires": [
+            [
+                "9fa55efe331df0d3"
+            ]
+        ]
+    },
+    {
+        "id": "821c0b142afca531",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"code\":400,\"message\":\"Content Type must be `application/gzip`\"}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 890,
+        "y": 2440,
+        "wires": [
+            [
+                "55159d8227a9acf9"
+            ]
+        ]
+    },
+    {
+        "id": "55159d8227a9acf9",
+        "type": "http response",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "statusCode": "404",
+        "headers": {},
+        "x": 1080,
+        "y": 2440,
+        "wires": []
+    },
+    {
+        "id": "d0c953477a0b6438",
+        "type": "subflow:2201d885ecb7ca8e",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "x": 360,
+        "y": 2520,
+        "wires": [
+            [
+                "d7bdfc308cdc2d15"
+            ]
+        ]
+    },
+    {
+        "id": "d7bdfc308cdc2d15",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "dump_id",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "path",
+                "pt": "msg",
+                "to": "$env(\"DUMP_DIRECTORY\")\t& \"/\" & msg.host.host_id\t& \"/\" & $fromMillis($millis(), \"[Y0001]\")\t& \"/\" & $fromMillis($millis(), \"[M01]\")",
+                "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "created_at",
+                "pt": "msg",
+                "to": "$now()",
+                "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$fromMillis($millis(), \"[D01]\")",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 580,
+        "y": 2520,
+        "wires": [
+            [
+                "bac797461061f3ca"
+            ]
+        ]
+    },
+    {
+        "id": "bac797461061f3ca",
+        "type": "fs-ops-mkdir",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "path": "path",
+        "pathType": "msg",
+        "dirname": "payload",
+        "dirnameType": "msg",
+        "recursive": true,
+        "mode": "755",
+        "fullpath": "directory",
+        "fullpathType": "msg",
+        "x": 800,
+        "y": 2520,
+        "wires": [
+            [
+                "76e1e09b91ab23b2"
+            ]
+        ]
+    },
+    {
+        "id": "76e1e09b91ab23b2",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "dump_filename",
+                "pt": "msg",
+                "to": "$millis()\t& \"_\" & msg.host.host_id\t& \"_\" & msg.host.type\t& \"_\" & msg.host.host\t& \"_\" & msg.host.version\t& \"_\" & msg.host.db\t& \".sql.tar.gz\"",
+                "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "req.body",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1020,
+        "y": 2520,
+        "wires": [
+            [
+                "9263e27e585355d2"
+            ]
+        ]
+    },
+    {
+        "id": "9263e27e585355d2",
+        "type": "file",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "filename": "msg.directory & \"/\" & msg.dump_filename",
+        "filenameType": "jsonata",
+        "appendNewline": false,
+        "createDir": false,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 1240,
+        "y": 2520,
+        "wires": [
+            [
+                "faac94e477f560ad"
+            ]
+        ]
+    },
+    {
+        "id": "4619fee0bb8a31b9",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "dumps",
+                "pt": "global",
+                "to": "[\t   $append(\t       $globalContext(\"dumps\"),\t       [\t           {\t               \"host_id\": msg.host.host_id,\t               \"dump_id\": msg.dump_id,\t               \"created_at\": msg.created_at,\t               \"dump_path\": msg.directory & \"/\" & msg.dump_filename,\t               \"filesize\": msg.filesize\t            }\t        ]\t    )\t]",
+                "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\t   \"dump_id\": msg.dump_id,\t   \"created_at\": msg.created_at,\t   \"dump_path\": msg.directory & \"/\" & msg.dump_filename,\t   \"filesize\": msg.filesize\t}",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1620,
+        "y": 2520,
+        "wires": [
+            [
+                "c52733dca59d016d"
+            ]
+        ]
+    },
+    {
+        "id": "faac94e477f560ad",
+        "type": "fs-ops-size",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "path": "directory",
+        "pathType": "msg",
+        "filename": "dump_filename",
+        "filenameType": "msg",
+        "size": "filesize",
+        "sizeType": "msg",
+        "x": 1420,
+        "y": 2520,
+        "wires": [
+            [
+                "4619fee0bb8a31b9"
+            ]
+        ]
+    }
+]

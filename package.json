@@ -1,0 +1,20 @@
+{
+    "name": "postgresql-dump-agent",
+    "version": "1.0.0",
+    "description": "Dump and restore you PostgreSQL database",
+    "author": "vincent@saashup.com",
+    "homepage": "https://github.com/SaaShup/postgresql-dump-agent",
+    "bugs": {
+        "url": "https://github.com/SaaShup/postgresql-dump-agent",
+        "email": "contact@saashup.com"
+    },
+    "license": "BSD-3-Clause",
+    "dependencies": {
+        "ajv": "^8.17.1",
+        "node-red": "*",
+        "node-red-contrib-chronos": "*",
+        "node-red-contrib-fs-ops": "*",
+        "openpgp": "^6.1.1",
+        "short-unique-id": "^5.3.2"
+    }
+}
