@@ -34,11 +34,11 @@
         ],
         "out": [
             {
-                "x": 980,
+                "x": 1180,
                 "y": 80,
                 "wires": [
                     {
-                        "id": "bc1605d2db7fbd3e",
+                        "id": "47ef62c315ea5479",
                         "port": 0
                     }
                 ]
@@ -254,6 +254,33 @@
         "action": "",
         "pretty": false,
         "x": 850,
+        "y": 80,
+        "wires": [
+            [
+                "47ef62c315ea5479"
+            ]
+        ]
+    },
+    {
+        "id": "47ef62c315ea5479",
+        "type": "change",
+        "z": "0729b9071d15ddb8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$replace(msg.payload, /^(\\d{2}\\.\\d).*/, \"$1\")",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1030,
         "y": 80,
         "wires": [
             []
