@@ -1,0 +1,1415 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "DB Dump Agent",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/hosts": {
+            "get": {
+                "description": "Get all stored Hosts.",
+                "operationId": "ListHosts",
+                "responses": {
+                    "200": {
+                        "description": "ListHosts 200 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ListHostsResponseContent"
+                                },
+                                "examples": {
+                                    "ListHosts_example1": {
+                                        "summary": "Get all Hosts",
+                                        "description": "",
+                                        "value": {
+                                            "hosts": [
+                                                {
+                                                    "host_id": "Nny3tUFGL7",
+                                                    "type": "postgresql",
+                                                    "host": "postgres-14",
+                                                    "port": 5432,
+                                                    "db": "mydb",
+                                                    "user": "me",
+                                                    "password": "password",
+                                                    "version": "14.0"
+                                                },
+                                                {
+                                                    "host_id": "IUxvYDwQV5",
+                                                    "type": "postgresql",
+                                                    "host": "postgres-15",
+                                                    "port": 5432,
+                                                    "db": "mydb",
+                                                    "user": "me",
+                                                    "password": "password",
+                                                    "version": "15.12"
+                                                },
+                                                {
+                                                    "host_id": "CiriMJSube",
+                                                    "type": "postgresql",
+                                                    "host": "postgres-16",
+                                                    "port": 5432,
+                                                    "db": "mydb",
+                                                    "user": "me",
+                                                    "password": "password",
+                                                    "version": "16.0"
+                                                },
+                                                {
+                                                    "host_id": "y1vdUpppoo",
+                                                    "type": "postgresql",
+                                                    "host": "postgres-17",
+                                                    "port": 5432,
+                                                    "db": "mydb",
+                                                    "user": "me",
+                                                    "password": "password",
+                                                    "version": "17.0"
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "ServiceError 500 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ServiceErrorResponseContent"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Host"
+                ]
+            },
+            "post": {
+                "description": "Create a new Host and test the connection in order to get the server version.",
+                "operationId": "CreateHost",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateHostRequestContent"
+                            },
+                            "examples": {
+                                "CreateHost_example1": {
+                                    "summary": "Create a Host",
+                                    "description": "",
+                                    "value": {
+                                        "type": "postgresql",
+                                        "host": "postgres-15",
+                                        "port": 5432,
+                                        "db": "mydb",
+                                        "user": "me",
+                                        "password": "password"
+                                    }
+                                },
+                                "CreateHost_example2": {
+                                    "summary": "Unable to get host version",
+                                    "description": "",
+                                    "value": {
+                                        "type": "postgresql",
+                                        "host": "postgres-15",
+                                        "port": 5432,
+                                        "db": "mydb",
+                                        "user": "me",
+                                        "password": "password"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "CreateHost 201 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CreateHostResponseContent"
+                                },
+                                "examples": {
+                                    "CreateHost_example1": {
+                                        "summary": "Create a Host",
+                                        "description": "",
+                                        "value": {
+                                            "host_id": "Nny3tUFGL7",
+                                            "version": "15.12"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "ServiceError 500 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ServiceErrorResponseContent"
+                                },
+                                "examples": {
+                                    "CreateHost_example2": {
+                                        "summary": "Unable to get host version",
+                                        "description": "",
+                                        "value": {
+                                            "code": 500,
+                                            "message": "Unable to get host version"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Host"
+                ]
+            }
+        },
+        "/api/hosts/{host_id}": {
+            "delete": {
+                "description": "Delete a Host. All dumps on the local volume will also be deleted.",
+                "operationId": "DeleteHost",
+                "parameters": [
+                    {
+                        "name": "host_id",
+                        "in": "path",
+                        "description": "The SUID of the Host.",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^[0-9a-zA-Z]{10}$",
+                            "description": "The SUID of the Host."
+                        },
+                        "required": true,
+                        "examples": {
+                            "DeleteHost_example1": {
+                                "summary": "Delete a Host",
+                                "description": "",
+                                "value": "Nny3tUFGL7"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "DeleteHost 204 response"
+                    },
+                    "500": {
+                        "description": "ServiceError 500 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ServiceErrorResponseContent"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Host"
+                ]
+            },
+            "get": {
+                "description": "Get a stored Host by its UUID.",
+                "operationId": "GetHost",
+                "parameters": [
+                    {
+                        "name": "host_id",
+                        "in": "path",
+                        "description": "The SUID of the Host.",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^[0-9a-zA-Z]{10}$",
+                            "description": "The SUID of the Host."
+                        },
+                        "required": true,
+                        "examples": {
+                            "GetHost_example1": {
+                                "summary": "Get a Host",
+                                "description": "",
+                                "value": "Nny3tUFGL7"
+                            },
+                            "GetHost_example2": {
+                                "summary": "Host not found",
+                                "description": "",
+                                "value": "IUxvYDwQV5"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "GetHost 200 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/GetHostResponseContent"
+                                },
+                                "examples": {
+                                    "GetHost_example1": {
+                                        "summary": "Get a Host",
+                                        "description": "",
+                                        "value": {
+                                            "host_id": "Nny3tUFGL7",
+                                            "type": "postgresql",
+                                            "host": "postgres-15",
+                                            "port": 5432,
+                                            "db": "mydb",
+                                            "user": "me",
+                                            "password": "password",
+                                            "version": "15.12"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "BadRequest 400 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequestResponseContent"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "NoSuchResource 404 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NoSuchResourceResponseContent"
+                                },
+                                "examples": {
+                                    "GetHost_example2": {
+                                        "summary": "Host not found",
+                                        "description": "",
+                                        "value": {
+                                            "code": 404,
+                                            "message": "Host not found"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "ServiceError 500 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ServiceErrorResponseContent"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Host"
+                ]
+            },
+            "post": {
+                "description": "Update a Host, test the connection in order to get the server version. All dump on the local volume will be kept until the retention date.",
+                "operationId": "UpdateHost",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateHostRequestContent"
+                            },
+                            "examples": {
+                                "UpdateHost_example1": {
+                                    "summary": "Update a Host",
+                                    "description": "",
+                                    "value": {
+                                        "type": "postgresql",
+                                        "host": "postgres-16",
+                                        "port": 5432,
+                                        "db": "mydb",
+                                        "user": "me",
+                                        "password": "password"
+                                    }
+                                },
+                                "UpdateHost_example2": {
+                                    "summary": "Host not found",
+                                    "description": "",
+                                    "value": {
+                                        "type": "postgresql",
+                                        "host": "postgres-18",
+                                        "port": 5432,
+                                        "db": "mydb",
+                                        "user": "me",
+                                        "password": "password"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "host_id",
+                        "in": "path",
+                        "description": "The SUID of the Host.",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^[0-9a-zA-Z]{10}$",
+                            "description": "The SUID of the Host."
+                        },
+                        "required": true,
+                        "examples": {
+                            "UpdateHost_example1": {
+                                "summary": "Update a Host",
+                                "description": "",
+                                "value": "Nny3tUFGL7"
+                            },
+                            "UpdateHost_example2": {
+                                "summary": "Host not found",
+                                "description": "",
+                                "value": "IUxvYDwQV5"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "UpdateHost 200 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UpdateHostResponseContent"
+                                },
+                                "examples": {
+                                    "UpdateHost_example1": {
+                                        "summary": "Update a Host",
+                                        "description": "",
+                                        "value": {
+                                            "version": "16.0"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "NoSuchResource 404 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NoSuchResourceResponseContent"
+                                },
+                                "examples": {
+                                    "UpdateHost_example2": {
+                                        "summary": "Host not found",
+                                        "description": "",
+                                        "value": {
+                                            "code": 404,
+                                            "message": "Host not found"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "ServiceError 500 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ServiceErrorResponseContent"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Host"
+                ]
+            }
+        },
+        "/api/hosts/{host_id}/dump": {
+            "post": {
+                "description": "Create a new Dump for a Host.",
+                "operationId": "CreateDump",
+                "parameters": [
+                    {
+                        "name": "host_id",
+                        "in": "path",
+                        "description": "The SUID of the Host.",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^[0-9a-zA-Z]{10}$",
+                            "description": "The SUID of the Host."
+                        },
+                        "required": true,
+                        "examples": {
+                            "CreateDump_example1": {
+                                "summary": "Create a new Dump",
+                                "description": "",
+                                "value": "Nny3tUFGL7"
+                            },
+                            "CreateDump_example2": {
+                                "summary": "Host not found",
+                                "description": "",
+                                "value": "IUxvYDwQV5"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "CreateDump 202 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CreateDumpResponseContent"
+                                },
+                                "examples": {
+                                    "CreateDump_example1": {
+                                        "summary": "Create a new Dump",
+                                        "description": "",
+                                        "value": {
+                                            "dump_id": "6mUNSKuj5i",
+                                            "created_at": "2025-05-21T14:48:00.000Z"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "NoSuchResource 404 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NoSuchResourceResponseContent"
+                                },
+                                "examples": {
+                                    "CreateDump_example2": {
+                                        "summary": "Host not found",
+                                        "description": "",
+                                        "value": {
+                                            "code": 404,
+                                            "message": "Host not found"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "ServiceError 500 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ServiceErrorResponseContent"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Dump"
+                ]
+            }
+        },
+        "/api/hosts/{host_id}/dumps": {
+            "get": {
+                "description": "Get dumps for a given host",
+                "operationId": "ListDumps",
+                "parameters": [
+                    {
+                        "name": "host_id",
+                        "in": "path",
+                        "description": "The SUID of the Host.",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^[0-9a-zA-Z]{10}$",
+                            "description": "The SUID of the Host."
+                        },
+                        "required": true,
+                        "examples": {
+                            "ListDumps_example1": {
+                                "summary": "Get dumps for a given host",
+                                "description": "",
+                                "value": "RsTHAFv375"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ListDumps 200 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ListDumpsResponseContent"
+                                },
+                                "examples": {
+                                    "ListDumps_example1": {
+                                        "summary": "Get dumps for a given host",
+                                        "description": "",
+                                        "value": {
+                                            "dumps": [
+                                                {
+                                                    "host_id": "RsTHAFv375",
+                                                    "dump_id": "74mvb32P9e",
+                                                    "created_at": "2025-05-20T14:46:17.143Z",
+                                                    "dump_path": "/dumps/RsTHAFv375/2025/05/20/1747752377143_RsTHAFv375_postgresql_postgres-14_14.18_mydb.sql.tar.gz",
+                                                    "filesize": 453
+                                                },
+                                                {
+                                                    "host_id": "RsTHAFv375",
+                                                    "dump_id": "yph1Ct7zj2",
+                                                    "created_at": "2025-05-20T14:46:20.511Z",
+                                                    "dump_path": "/dumps/RsTHAFv375/2025/05/20/1747752380511_RsTHAFv375_postgresql_postgres-14_14.18_mydb.sql.tar.gz",
+                                                    "filesize": 452
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "ServiceError 500 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ServiceErrorResponseContent"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Dump"
+                ]
+            }
+        },
+        "/api/hosts/{host_id}/dumps/{dump_id}": {
+            "delete": {
+                "description": "Download a Dump.",
+                "operationId": "DeleteDump",
+                "parameters": [
+                    {
+                        "name": "host_id",
+                        "in": "path",
+                        "description": "The SUID of the Host.",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^[0-9a-zA-Z]{10}$",
+                            "description": "The SUID of the Host."
+                        },
+                        "required": true,
+                        "examples": {
+                            "DeleteDump_example1": {
+                                "summary": "Delte a host dump file",
+                                "description": "",
+                                "value": "Nny3tUFGL7"
+                            },
+                            "DeleteDump_example2": {
+                                "summary": "Dump not found",
+                                "description": "",
+                                "value": "IUxvYDwQV5"
+                            }
+                        }
+                    },
+                    {
+                        "name": "dump_id",
+                        "in": "path",
+                        "description": "The SUID of the Dump",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^[0-9a-zA-Z]{10}$",
+                            "description": "The SUID of the Dump"
+                        },
+                        "required": true,
+                        "examples": {
+                            "DeleteDump_example1": {
+                                "summary": "Delte a host dump file",
+                                "description": "",
+                                "value": "IUxvYDwQV5"
+                            },
+                            "DeleteDump_example2": {
+                                "summary": "Dump not found",
+                                "description": "",
+                                "value": "1Ade87BB98"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "DeleteDump 204 response"
+                    },
+                    "404": {
+                        "description": "NoSuchResource 404 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NoSuchResourceResponseContent"
+                                },
+                                "examples": {
+                                    "DeleteDump_example2": {
+                                        "summary": "Dump not found",
+                                        "description": "",
+                                        "value": {
+                                            "code": 404,
+                                            "message": "Host not found"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "ServiceError 500 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ServiceErrorResponseContent"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Dump"
+                ]
+            },
+            "get": {
+                "description": "Download a Dump.",
+                "operationId": "DownloadDump",
+                "parameters": [
+                    {
+                        "name": "host_id",
+                        "in": "path",
+                        "description": "The SUID of the Host.",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^[0-9a-zA-Z]{10}$",
+                            "description": "The SUID of the Host."
+                        },
+                        "required": true,
+                        "examples": {
+                            "DownloadDump_example1": {
+                                "summary": "Download a host dump file",
+                                "description": "",
+                                "value": "Nny3tUFGL7"
+                            },
+                            "DownloadDump_example2": {
+                                "summary": "Dump not found",
+                                "description": "",
+                                "value": "IUxvYDwQV5"
+                            }
+                        }
+                    },
+                    {
+                        "name": "dump_id",
+                        "in": "path",
+                        "description": "The SUID of the Dump",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^[0-9a-zA-Z]{10}$",
+                            "description": "The SUID of the Dump"
+                        },
+                        "required": true,
+                        "examples": {
+                            "DownloadDump_example1": {
+                                "summary": "Download a host dump file",
+                                "description": "",
+                                "value": "IUxvYDwQV5"
+                            },
+                            "DownloadDump_example2": {
+                                "summary": "Dump not found",
+                                "description": "",
+                                "value": "1Ade87BB98"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "DownloadDump 200 response",
+                        "headers": {
+                            "Content-Disposition": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "required": true,
+                                "examples": {
+                                    "DownloadDump_example1": {
+                                        "summary": "Download a host dump file",
+                                        "description": "",
+                                        "value": "attachment; filename=\"1747731292920_Nny3tUFGL7_postgresql_postgres-14_14.18_mydb.sql.tar.gz\""
+                                    }
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/gzip": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DownloadDumpOutputPayload"
+                                },
+                                "examples": {
+                                    "DownloadDump_example1": {
+                                        "summary": "Download a host dump file",
+                                        "description": "",
+                                        "value": "..."
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "NoSuchResource 404 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NoSuchResourceResponseContent"
+                                },
+                                "examples": {
+                                    "DownloadDump_example2": {
+                                        "summary": "Dump not found",
+                                        "description": "",
+                                        "value": {
+                                            "code": 404,
+                                            "message": "Host not found"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "ServiceError 500 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ServiceErrorResponseContent"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Dump"
+                ]
+            }
+        },
+        "/api/hosts/{host_id}/dumps/{dump_id}/restore": {
+            "post": {
+                "description": "Restore a dump",
+                "operationId": "RestoreDump",
+                "parameters": [
+                    {
+                        "name": "host_id",
+                        "in": "path",
+                        "description": "The SUID of the Host.",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^[0-9a-zA-Z]{10}$",
+                            "description": "The SUID of the Host."
+                        },
+                        "required": true,
+                        "examples": {
+                            "RestoreDump_example1": {
+                                "summary": "Restore a dump",
+                                "description": "",
+                                "value": "RsTHAFv375"
+                            },
+                            "RestoreDump_example2": {
+                                "summary": "Dump not found",
+                                "description": "",
+                                "value": "IUxvYDwQV5"
+                            }
+                        }
+                    },
+                    {
+                        "name": "dump_id",
+                        "in": "path",
+                        "description": "The SUID of the Dump",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^[0-9a-zA-Z]{10}$",
+                            "description": "The SUID of the Dump"
+                        },
+                        "required": true,
+                        "examples": {
+                            "RestoreDump_example1": {
+                                "summary": "Restore a dump",
+                                "description": "",
+                                "value": "74mvb32P9e"
+                            },
+                            "RestoreDump_example2": {
+                                "summary": "Dump not found",
+                                "description": "",
+                                "value": "1Ade87BB98"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "RestoreDump 202 response"
+                    },
+                    "404": {
+                        "description": "NoSuchResource 404 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NoSuchResourceResponseContent"
+                                },
+                                "examples": {
+                                    "RestoreDump_example2": {
+                                        "summary": "Dump not found",
+                                        "description": "",
+                                        "value": {
+                                            "code": 404,
+                                            "message": "Host not found"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "ServiceError 500 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ServiceErrorResponseContent"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Dump"
+                ]
+            }
+        },
+        "/api/hosts/{host_id}/upload": {
+            "post": {
+                "description": "Upload a dump file for a Host.",
+                "operationId": "UploadDump",
+                "requestBody": {
+                    "content": {
+                        "application/gzip": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UploadDumpInputPayload"
+                            },
+                            "examples": {
+                                "UploadDump_example1": {
+                                    "summary": "Upload a dump file for a host",
+                                    "description": "",
+                                    "value": "..."
+                                },
+                                "UploadDump_example2": {
+                                    "summary": "Host not found",
+                                    "description": "",
+                                    "value": "..."
+                                },
+                                "UploadDump_example3": {
+                                    "summary": "Content Type not valid",
+                                    "description": "",
+                                    "value": "..."
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "host_id",
+                        "in": "path",
+                        "description": "The SUID of the Host.",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^[0-9a-zA-Z]{10}$",
+                            "description": "The SUID of the Host."
+                        },
+                        "required": true,
+                        "examples": {
+                            "UploadDump_example1": {
+                                "summary": "Upload a dump file for a host",
+                                "description": "",
+                                "value": "Nny3tUFGL7"
+                            },
+                            "UploadDump_example2": {
+                                "summary": "Host not found",
+                                "description": "",
+                                "value": "IUxvYDwQV5"
+                            },
+                            "UploadDump_example3": {
+                                "summary": "Content Type not valid",
+                                "description": "",
+                                "value": "IUxvYDwQV5"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "UploadDump 200 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UploadDumpResponseContent"
+                                },
+                                "examples": {
+                                    "UploadDump_example1": {
+                                        "summary": "Upload a dump file for a host",
+                                        "description": "",
+                                        "value": {
+                                            "dump_id": "Tfhb4GWCI4",
+                                            "created_at": "2025-05-22T15:32:08.748Z",
+                                            "dump_path": "/dumps/Nny3tUFGL7/2025/05/22/1747927928750_Nny3tUFGL7_postgresql_postgres-14_14.0_mydb.sql.tar.gz",
+                                            "filesize": 1287
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "BadRequest 400 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequestResponseContent"
+                                },
+                                "examples": {
+                                    "UploadDump_example3": {
+                                        "summary": "Content Type not valid",
+                                        "description": "",
+                                        "value": {
+                                            "code": 400,
+                                            "message": "Content Type must be `application/gzip`"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "NoSuchResource 404 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NoSuchResourceResponseContent"
+                                },
+                                "examples": {
+                                    "UploadDump_example2": {
+                                        "summary": "Host not found",
+                                        "description": "",
+                                        "value": {
+                                            "code": 404,
+                                            "message": "Host not found"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "ServiceError 500 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ServiceErrorResponseContent"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "Dump"
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "BadRequestResponseContent": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "number"
+                    },
+                    "message": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "code",
+                    "message"
+                ]
+            },
+            "CreateDumpResponseContent": {
+                "type": "object",
+                "properties": {
+                    "dump_id": {
+                        "type": "string",
+                        "pattern": "^[0-9a-zA-Z]{10}$",
+                        "description": "The SUID of the Dump"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "dump_path": {
+                        "type": "string",
+                        "pattern": "^/[0-9AZa-z_-]+/[0-9a-zA-Z]{10}/\\d{4}/\\d{2}/\\d{2}/\\d+_[0-9a-zA-Z]{10}_(postgresql)_(.*)_(14|15|16|17)\\.\\d{1,2}_(.*)\\.tar\\.gz$",
+                        "description": "The path of the dump file"
+                    },
+                    "filesize": {
+                        "type": "number",
+                        "description": "The size of the dump file in Bytes"
+                    }
+                },
+                "required": [
+                    "created_at",
+                    "dump_id"
+                ]
+            },
+            "CreateHostRequestContent": {
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "$ref": "#/components/schemas/HostType"
+                    },
+                    "host": {
+                        "type": "string",
+                        "description": "The host name of the machine on which the server is running."
+                    },
+                    "port": {
+                        "type": "number",
+                        "default": 5432,
+                        "maximum": 65535,
+                        "minimum": 0,
+                        "description": "The TCP port on which the server is listening for connections."
+                    },
+                    "db": {
+                        "type": "string",
+                        "description": "The name of the database to dump."
+                    },
+                    "user": {
+                        "type": "string",
+                        "description": "The user name to connect as."
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "The user password to connect with."
+                    }
+                },
+                "required": [
+                    "db",
+                    "host",
+                    "password",
+                    "type",
+                    "user"
+                ]
+            },
+            "CreateHostResponseContent": {
+                "type": "object",
+                "properties": {
+                    "host_id": {
+                        "type": "string",
+                        "pattern": "^[0-9a-zA-Z]{10}$",
+                        "description": "The SUID of the Host."
+                    },
+                    "version": {
+                        "type": "string",
+                        "description": "The version of the server running on the host."
+                    }
+                },
+                "required": [
+                    "host_id",
+                    "version"
+                ]
+            },
+            "DownloadDumpOutputPayload": {
+                "type": "string",
+                "contentEncoding": "byte"
+            },
+            "DumpStructure": {
+                "type": "object",
+                "properties": {
+                    "host_id": {
+                        "type": "string",
+                        "pattern": "^[0-9a-zA-Z]{10}$",
+                        "description": "The SUID of the Host."
+                    },
+                    "dump_id": {
+                        "type": "string",
+                        "pattern": "^[0-9a-zA-Z]{10}$",
+                        "description": "The SUID of the Dump"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "dump_path": {
+                        "type": "string",
+                        "pattern": "^/[0-9AZa-z_-]+/[0-9a-zA-Z]{10}/\\d{4}/\\d{2}/\\d{2}/\\d+_[0-9a-zA-Z]{10}_(postgresql)_(.*)_(14|15|16|17)\\.\\d{1,2}_(.*)\\.tar\\.gz$",
+                        "description": "The path of the dump file"
+                    },
+                    "filesize": {
+                        "type": "number",
+                        "description": "The size of the dump file in Bytes"
+                    }
+                },
+                "required": [
+                    "created_at",
+                    "dump_id",
+                    "host_id"
+                ]
+            },
+            "GetHostResponseContent": {
+                "type": "object",
+                "properties": {
+                    "host_id": {
+                        "type": "string",
+                        "pattern": "^[0-9a-zA-Z]{10}$",
+                        "description": "The SUID of the Host."
+                    },
+                    "type": {
+                        "$ref": "#/components/schemas/HostType"
+                    },
+                    "host": {
+                        "type": "string",
+                        "description": "The host name of the machine on which the server is running."
+                    },
+                    "port": {
+                        "type": "number",
+                        "default": 5432,
+                        "maximum": 65535,
+                        "minimum": 0,
+                        "description": "The TCP port on which the server is listening for connections."
+                    },
+                    "db": {
+                        "type": "string",
+                        "description": "The name of the database to dump."
+                    },
+                    "user": {
+                        "type": "string",
+                        "description": "The user name to connect as."
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "The user password to connect with."
+                    },
+                    "version": {
+                        "type": "string",
+                        "description": "The version of the server running on the host."
+                    }
+                },
+                "required": [
+                    "db",
+                    "host",
+                    "host_id",
+                    "password",
+                    "port",
+                    "type",
+                    "user",
+                    "version"
+                ]
+            },
+            "HostStructure": {
+                "type": "object",
+                "properties": {
+                    "host_id": {
+                        "type": "string",
+                        "pattern": "^[0-9a-zA-Z]{10}$",
+                        "description": "The SUID of the Host."
+                    },
+                    "type": {
+                        "$ref": "#/components/schemas/HostType"
+                    },
+                    "host": {
+                        "type": "string",
+                        "description": "The host name of the machine on which the server is running."
+                    },
+                    "port": {
+                        "type": "number",
+                        "default": 5432,
+                        "maximum": 65535,
+                        "minimum": 0,
+                        "description": "The TCP port on which the server is listening for connections."
+                    },
+                    "db": {
+                        "type": "string",
+                        "description": "The name of the database to dump."
+                    },
+                    "user": {
+                        "type": "string",
+                        "description": "The user name to connect as."
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "The user password to connect with."
+                    },
+                    "version": {
+                        "type": "string",
+                        "description": "The version of the server running on the host."
+                    }
+                },
+                "required": [
+                    "db",
+                    "host",
+                    "host_id",
+                    "password",
+                    "port",
+                    "type",
+                    "user",
+                    "version"
+                ]
+            },
+            "HostType": {
+                "type": "string",
+                "description": "The type of the Host. Can be `postgresql`.",
+                "enum": [
+                    "postgresql"
+                ]
+            },
+            "ListDumpsResponseContent": {
+                "type": "object",
+                "properties": {
+                    "dumps": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/DumpStructure"
+                        }
+                    }
+                }
+            },
+            "ListHostsResponseContent": {
+                "type": "object",
+                "properties": {
+                    "hosts": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/HostStructure"
+                        }
+                    }
+                }
+            },
+            "NoSuchResourceResponseContent": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "number"
+                    },
+                    "message": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "code",
+                    "message"
+                ]
+            },
+            "ServiceErrorResponseContent": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "number",
+                        "default": 500
+                    },
+                    "message": {
+                        "type": "string",
+                        "default": "Internal Server Error"
+                    }
+                },
+                "required": [
+                    "code",
+                    "message"
+                ]
+            },
+            "UpdateHostRequestContent": {
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "$ref": "#/components/schemas/HostType"
+                    },
+                    "host": {
+                        "type": "string",
+                        "description": "The host name of the machine on which the server is running."
+                    },
+                    "port": {
+                        "type": "number",
+                        "maximum": 65535,
+                        "minimum": 0,
+                        "description": "The TCP port on which the server is listening for connections."
+                    },
+                    "db": {
+                        "type": "string",
+                        "description": "The name of the database to dump."
+                    },
+                    "user": {
+                        "type": "string",
+                        "description": "The user name to connect as."
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "The user password to connect with."
+                    }
+                }
+            },
+            "UpdateHostResponseContent": {
+                "type": "object",
+                "properties": {
+                    "version": {
+                        "type": "string",
+                        "description": "The version of the server running on the host."
+                    }
+                },
+                "required": [
+                    "version"
+                ]
+            },
+            "UploadDumpInputPayload": {
+                "type": "string",
+                "contentEncoding": "byte"
+            },
+            "UploadDumpResponseContent": {
+                "type": "object",
+                "properties": {
+                    "dump_id": {
+                        "type": "string",
+                        "pattern": "^[0-9a-zA-Z]{10}$",
+                        "description": "The SUID of the Dump"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "dump_path": {
+                        "type": "string",
+                        "pattern": "^/[0-9AZa-z_-]+/[0-9a-zA-Z]{10}/\\d{4}/\\d{2}/\\d{2}/\\d+_[0-9a-zA-Z]{10}_(postgresql)_(.*)_(14|15|16|17)\\.\\d{1,2}_(.*)\\.tar\\.gz$",
+                        "description": "The path of the dump file"
+                    },
+                    "filesize": {
+                        "type": "number",
+                        "description": "The size of the dump file in Bytes"
+                    }
+                },
+                "required": [
+                    "created_at",
+                    "dump_id",
+                    "dump_path",
+                    "filesize"
+                ]
+            }
+        }
+    }
+}
