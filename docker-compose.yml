@@ -30,11 +30,13 @@ services:
             - 1880:1880
         volumes:
             - .:/data
+            - ./settings_dev.js:/data/settings.js
             - postgres-dump:/dumps
+            - ./dumps:/dumps
         environment:
-            - ENABLE_EDITOR=true
+            - FLOWS=/data/flows.json
+            - APPPATH=/data
             - DUMP_DIRECTORY=/dumps
-            - RETENTION_DUMPS=10
             - SECRET_KEY="averysecretkeyforencryptpasswords"
 
 volumes:

@@ -11,6 +11,8 @@ RUN apt update && apt install -y \
     postgresql-client-16 \
     postgresql-client-17
 
+USER node-red
+
 WORKDIR /usr/src/node-red
 
 COPY package.json /usr/src/node-red/package.json
