@@ -903,25 +903,19 @@
                 "operationId": "UploadDump",
                 "requestBody": {
                     "content": {
-                        "application/gzip": {
+                        "multipart/form-data": {
                             "schema": {
-                                "$ref": "#/components/schemas/UploadDumpInputPayload"
+                                "type": "object",
+                                "properties": {
+                                    "dump_file": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
                             },
-                            "examples": {
-                                "UploadDump_example1": {
-                                    "summary": "Upload a dump file for a host",
-                                    "description": "",
-                                    "value": "..."
-                                },
-                                "UploadDump_example2": {
-                                    "summary": "Host not found",
-                                    "description": "",
-                                    "value": "..."
-                                },
-                                "UploadDump_example3": {
-                                    "summary": "Content Type not valid",
-                                    "description": "",
-                                    "value": "..."
+                            "encoding": {
+                                "dump_file": {
+                                    "contentType": "application/gzip"
                                 }
                             }
                         }
@@ -1379,7 +1373,7 @@
             },
             "UploadDumpInputPayload": {
                 "type": "string",
-                "contentEncoding": "byte"
+                "format": "binary"
             },
             "UploadDumpResponseContent": {
                 "type": "object",

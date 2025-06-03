@@ -1249,7 +1249,7 @@
         "name": "",
         "url": "/hosts/:host_id/dump",
         "method": "post",
-        "upload": false,
+        "upload": true,
         "swaggerDoc": "",
         "x": 210,
         "y": 280,
@@ -3113,7 +3113,7 @@
         "name": "",
         "url": "/hosts/:host_id/upload",
         "method": "post",
-        "upload": false,
+        "upload": true,
         "swaggerDoc": "",
         "x": 210,
         "y": 2380,
@@ -3139,12 +3139,12 @@
         "type": "switch",
         "z": "45b89d4ab1bd2d20",
         "name": "",
-        "property": "req.headers.content-type",
-        "propertyType": "msg",
+        "property": "msg.req.files[fieldname=\"dump_file\"].mimetype",
+        "propertyType": "jsonata",
         "rules": [
             {
                 "t": "eq",
-                "v": "application/gzip",
+                "v": "application/x-gzip",
                 "vt": "str"
             },
             {
@@ -3238,7 +3238,7 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 670,
+        "x": 690,
         "y": 2380,
         "wires": [
             [
@@ -3319,7 +3319,7 @@
         "type": "http response",
         "z": "45b89d4ab1bd2d20",
         "name": "",
-        "statusCode": "404",
+        "statusCode": "400",
         "headers": {},
         "x": 1080,
         "y": 2440,
@@ -3424,8 +3424,8 @@
                 "t": "set",
                 "p": "payload",
                 "pt": "msg",
-                "to": "req.body",
-                "tot": "msg"
+                "to": "msg.req.files[fieldname=\"dump_file\"].buffer",
+                "tot": "jsonata"
             }
         ],
         "action": "",
