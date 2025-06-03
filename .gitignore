@@ -2,3 +2,5 @@ node_modules
 .*.json*
 docker-compose.override.yml
 build
+dumps/**
+!dumps/.gitkeep

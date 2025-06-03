@@ -158,16 +158,6 @@
         "color": "#DDAA99"
     },
     {
-        "id": "f2324d38a803d929",
-        "type": "chronos-config",
-        "name": "config-chronos-scheduler",
-        "latitudeType": "num",
-        "longitudeType": "num",
-        "timezone": "UTC",
-        "timezoneType": "str",
-        "sunPositions": []
-    },
-    {
         "id": "30e4d7e8801dbe73",
         "type": "change",
         "z": "0729b9071d15ddb8",
@@ -1353,148 +1343,6 @@
         "wires": []
     },
     {
-        "id": "f1d0c8a2d222efff",
-        "type": "inject",
-        "z": "45b89d4ab1bd2d20",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": true,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 990,
-        "y": 100,
-        "wires": [
-            [
-                "537473b3779b1ac9"
-            ]
-        ]
-    },
-    {
-        "id": "ad410abf1124440f",
-        "type": "chronos-scheduler",
-        "z": "45b89d4ab1bd2d20",
-        "name": "",
-        "config": "f2324d38a803d929",
-        "schedule": [
-            {
-                "trigger": {
-                    "type": "crontab",
-                    "value": "0 0 1 1 *"
-                },
-                "output": {
-                    "type": "msg",
-                    "property": {
-                        "name": "payload",
-                        "type": "date",
-                        "value": ""
-                    }
-                }
-            }
-        ],
-        "disabled": false,
-        "multiPort": false,
-        "nextEventPort": false,
-        "delayOnStart": true,
-        "onStartDelay": 0.1,
-        "outputs": 1,
-        "x": 1580,
-        "y": 100,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "537473b3779b1ac9",
-        "type": "switch",
-        "z": "45b89d4ab1bd2d20",
-        "name": "",
-        "property": "SCHEDULE_DUMP",
-        "propertyType": "env",
-        "rules": [
-            {
-                "t": "nempty"
-            },
-            {
-                "t": "else"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 2,
-        "x": 1170,
-        "y": 100,
-        "wires": [
-            [
-                "6ad3851bf3c5b22f"
-            ],
-            [
-                "e4b4fba8e41f8aa3"
-            ]
-        ]
-    },
-    {
-        "id": "6ad3851bf3c5b22f",
-        "type": "change",
-        "z": "45b89d4ab1bd2d20",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "[\t    {\t        \"type\": \"crontab\",\t        \"value\": $env(\"SCHEDULE_DUMP\")\t    }\t]",
-                "tot": "jsonata"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 1360,
-        "y": 60,
-        "wires": [
-            [
-                "ad410abf1124440f"
-            ]
-        ]
-    },
-    {
-        "id": "e4b4fba8e41f8aa3",
-        "type": "change",
-        "z": "45b89d4ab1bd2d20",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "false",
-                "tot": "bool"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 1360,
-        "y": 140,
-        "wires": [
-            [
-                "ad410abf1124440f"
-            ]
-        ]
-    },
-    {
         "id": "fde4863213fc7116",
         "type": "comment",
         "z": "45b89d4ab1bd2d20",
@@ -1541,16 +1389,6 @@
         "info": "",
         "x": 150,
         "y": 220,
-        "wires": []
-    },
-    {
-        "id": "b99064a1fbb08599",
-        "type": "comment",
-        "z": "45b89d4ab1bd2d20",
-        "name": "Schedule create dump.",
-        "info": "",
-        "x": 1020,
-        "y": 60,
         "wires": []
     },
     {
@@ -2782,7 +2620,7 @@
                 "t": "set",
                 "p": "payload",
                 "pt": "msg",
-                "to": "(\t    $dumps := $globalContext(\"dumps\");\t    $dump_id := msg.req.params.dump_id;\t    $host_id := msg.req.params.host_id;\t    $dumps[dump_id=$dump_id and host_id=$host_id]\t)",
+                "to": "(\t    $dumps := $globalContext(\"dumps\");\t    $dump_id := msg.req.params.dump_id;\t    $dumps[dump_id=$dump_id]\t)",
                 "tot": "jsonata"
             }
         ],
@@ -2906,7 +2744,7 @@
         "y": 1720,
         "wires": [
             [
-                "7be784c8718c316c"
+                "94d6c96e106025db"
             ]
         ]
     },
@@ -2915,8 +2753,8 @@
         "type": "subflow:d24a56a257d357bf",
         "z": "45b89d4ab1bd2d20",
         "name": "",
-        "x": 1200,
-        "y": 1720,
+        "x": 140,
+        "y": 1860,
         "wires": [
             [
                 "775f77b558758ef9"
@@ -3131,7 +2969,8 @@
         "y": 2100,
         "wires": [
             [
-                "448456f584122772"
+                "448456f584122772",
+                "ff3b6e5bc467a9f1"
             ],
             [],
             []
@@ -3184,7 +3023,7 @@
         "oldrc": false,
         "name": "Remove the extract",
         "x": 1050,
-        "y": 2100,
+        "y": 2080,
         "wires": [
             [],
             [],
@@ -3214,8 +3053,7 @@
         "y": 2080,
         "wires": [
             [
-                "fe976bbe0b8fbd9d",
-                "ff3b6e5bc467a9f1"
+                "fe976bbe0b8fbd9d"
             ]
         ]
     },
@@ -3226,8 +3064,8 @@
         "name": "",
         "statusCode": "",
         "headers": {},
-        "x": 990,
-        "y": 2220,
+        "x": 770,
+        "y": 2140,
         "wires": []
     },
     {
@@ -3674,5 +3512,72 @@
                 "4619fee0bb8a31b9"
             ]
         ]
+    },
+    {
+        "id": "94d6c96e106025db",
+        "type": "switch",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "property": "host",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nempty"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 1210,
+        "y": 1720,
+        "wires": [
+            [
+                "7be784c8718c316c"
+            ],
+            [
+                "3ed0fc733561ed11"
+            ]
+        ]
+    },
+    {
+        "id": "3ed0fc733561ed11",
+        "type": "change",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "{\"code\":404,\"message\":\"Host not found\"}",
+                "tot": "json"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1230,
+        "y": 1780,
+        "wires": [
+            [
+                "0cfc500403e95299"
+            ]
+        ]
+    },
+    {
+        "id": "0cfc500403e95299",
+        "type": "http response",
+        "z": "45b89d4ab1bd2d20",
+        "name": "",
+        "statusCode": "404",
+        "headers": {},
+        "x": 1420,
+        "y": 1780,
+        "wires": []
     }
 ]
