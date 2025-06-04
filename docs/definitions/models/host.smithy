@@ -290,38 +290,20 @@ structure HostStructure for Host {
 @tags(["Dump"])
 @http(method: "POST", uri: "/api/hosts/{host_id}/upload", code: 200)
 @documentation("Upload a dump file for a Host.")
-@examples([
-    {
-        title: "Upload a dump file for a host"
-        input: { host_id: "Nny3tUFGL7", content: "..." }
-        output: { dump_id: "Tfhb4GWCI4", created_at: "2025-05-22T15:32:08.748Z", dump_path: "/dumps/Nny3tUFGL7/2025/05/22/1747927928750_Nny3tUFGL7_postgresql_postgres-14_14.0_mydb.sql.tar.gz", filesize: 1287 }
-    }
-    {
-        title: "Host not found"
-        input: { host_id: "IUxvYDwQV5", content: "..." }
-        error: {
-            shapeId: NoSuchResource
-            content: { code: 404, message: "Host not found" }
-        }
-    }
-    {
-        title: "Content Type not valid"
-        input: { host_id: "IUxvYDwQV5", content: "..." }
-        error: {
-            shapeId: BadRequest
-            content: { code: 400, message: "Content Type must be `application/gzip`" }
-        }
-    }
-])
 operation UploadDump {
     input := for Host {
         @required
         @httpLabel
         $host_id
 
+        @required
+        @httpHeader("Content-Type")
+        @notProperty
+        contentType: String = "multipart/form-data"
+
         @httpPayload
         @notProperty
-        content: UploadData
+        dump_file: UploadData
     }
 
     output := for Dump {
@@ -377,5 +359,5 @@ string Password
 @documentation("The version of the server running on the host.")
 string Version
 
-@mediaType("application/gzip")
+@mediaType("application/x-gzip")
 blob UploadData
