@@ -11,6 +11,10 @@ RUN apt update && apt install -y \
     postgresql-client-16 \
     postgresql-client-17
 
+USER root
+
+RUN mkdir /dumps && chown -R node-red:root /dumps && chmod -R g+rwX /dumps
+
 USER node-red
 
 WORKDIR /usr/src/node-red
@@ -24,8 +28,8 @@ COPY public /usr/src/node-red/public
 COPY flows.json /usr/src/node-red/flows.json
 
 COPY settings.js /data
-COPY hosts.json /data
-COPY dumps.json /data
+COPY --chown=node-red:node-red hosts.json /data
+COPY --chown=node-red:node-red dumps.json /data
 
 ENV FLOWS=/usr/src/node-red/flows.json
 ENV DATAPATH=/data
