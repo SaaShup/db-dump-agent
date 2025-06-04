@@ -1,6 +1,6 @@
 {
     "name": "postgresql-dump-agent",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "Dump and restore you PostgreSQL database",
     "author": "vincent@saashup.com",
     "homepage": "https://github.com/SaaShup/postgresql-dump-agent",
